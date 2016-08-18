@@ -1,0 +1,31 @@
+{
+  "name": "ddsl-react",
+  "version": "1.0.0",
+  "description": "Apply ddsl to React components in runtime",
+  "main": "index.js",
+  "dependencies": {
+    "camel-case": "^3.0.0",
+    "react": "^15.3.0",
+    "xjst-ddsl": "github:awinogradov/xjst-ddsl#js-bindings"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/awinogradov/ddsl-react.git"
+  },
+  "keywords": [
+    "react",
+    "templates",
+    "xjst",
+    "bem"
+  ],
+  "author": "Anton Winogradov <winogradovaa@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/awinogradov/ddsl-react/issues"
+  },
+  "homepage": "https://github.com/awinogradov/ddsl-react#readme"
+}
