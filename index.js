@@ -1,6 +1,6 @@
 'use strict';
 
-const DDSL = require('xjst-ddsl').Engine;
+const DDSL = require('xjst-ddsl/lib/ddsl');
 const React = require('react');
 const camelCase = require('camel-case');
 
