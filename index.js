@@ -57,7 +57,7 @@ module.exports = function (templates) {
     constructor: function (ddsl, js) {
       var props = null;
       if (ddsl[1]) {
-        props = ddsl[1];
+        props = {};
         // capitalize react props
         Object.keys(ddsl[1]).forEach(function (key) {
           if (capitalizableDict[key]) {
