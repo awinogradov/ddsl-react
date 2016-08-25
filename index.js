@@ -50,16 +50,20 @@ const capitalizableDict = {
   checked: 'defaultChecked'
 };
 
-module.exports = function (templates) {
+module.exports = function (templates, reactComponents) {
+    var ddslRuntime = {};
+    ddslRuntime._tmpls = [];
+
   // REACT TRANSFORMATIONS IN RUNTIME
   const runtime = new DDSL({
     generateKeys: true,
-    constructor: function (ddsl, js) {
+    components: reactComponents,
+    constructor: function (ddsl, context, js) {
       var props = null;
       if (ddsl[1]) {
         props = {};
         // capitalize react props
-        Object.keys(ddsl[1]).forEach(function (key) {
+        Object.keys(ddsl[1]).forEach(function(key) {
           if (capitalizableDict[key]) {
             props[capitalizableDict[key]] = ddsl[1][key];
           } else {
@@ -67,33 +71,51 @@ module.exports = function (templates) {
           }
         });
         // objectify inline styles
-        if (props.style) {
+        if (props.style && typeof props.style === 'string') {
           props.style = props.style.split(';').reduce((ruleMap, ruleString) => {
             if (ruleString) {
               const rulePair = ruleString.split(/:(.+)/);
-              ruleMap[camelCase(rulePair[0].trim())] = rulePair[1].trim();
+              if(rulePair[0] && rulePair[1]) {
+                  ruleMap[camelCase(rulePair[0].trim())] = rulePair[1].trim();
+              }
             }
             return ruleMap;
           }, {});
         }
       }
-      // bind events
-      if (js) {
+
+      if(props && props.__replace && this.options.components && this.options.components[context.block]) {
+        ddsl[0] = this.options.components[context.block];
+        delete props.__replace;
+      }
+
+      if(context.block && js) {
+        Object.keys(js).forEach(key => {
+          if(typeof js[key] === 'function') {
+            js[key] = js[key].bind(ddslRuntime.reactContext);
+          }
+        });
         props = Object.assign(props || {}, js);
       }
-      // props are second argument
+
       ddsl[1] = props;
-      // return react element to runtime
-      return React.createElement.apply(
-        React.createElement,
-        ddsl
-      );
+      return React.createElement.apply(React.createElement, ddsl);
     }
   });
 
-  var ddslRuntime = {};
   runtime.compile(templates || '');
   runtime.exportApply(ddslRuntime);
+  ddslRuntime.templates = function(templates) {
+    ddslRuntime._tmpls.push(templates);
+  };
+
+  ddslRuntime.match = function(json, context) {
+    ddslRuntime.reactContext = context;
+    ddslRuntime._tmpls.forEach(ddslRuntime.compile);
+
+    ddslRuntime.BEMContext.prototype.cloneElement = React.cloneElement;
+    return ddslRuntime.apply(json);
+  };
 
   return ddslRuntime;
 }
