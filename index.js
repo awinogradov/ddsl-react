@@ -46,8 +46,8 @@ const capitalizableDict = {
   srcset: 'srcSet',
   tabindex: 'tabIndex',
   usemap: 'useMap',
-  value: 'defaultValue',
-  checked: 'defaultChecked'
+  // value: 'defaultValue',
+  // checked: 'defaultChecked'
 };
 
 module.exports = function (templates, reactComponents) {
@@ -56,7 +56,7 @@ module.exports = function (templates, reactComponents) {
 
   // REACT TRANSFORMATIONS IN RUNTIME
   const runtime = new DDSL({
-    generateKeys: true,
+    // generateKeys: true,
     components: reactComponents,
     constructor: function (ddsl, context, js) {
       var props = null;
