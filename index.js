@@ -50,7 +50,7 @@ const capitalizableDict = {
   // checked: 'defaultChecked'
 };
 
-module.exports = function (templates, reactComponents) {
+module.exports = function (templates, reactComponents, lib) {
     var ddslRuntime = {};
     ddslRuntime._tmpls = [];
 
@@ -112,8 +112,8 @@ module.exports = function (templates, reactComponents) {
   ddslRuntime.match = function(json, context) {
     ddslRuntime.reactContext = context;
     ddslRuntime._tmpls.forEach(ddslRuntime.compile);
-
-    ddslRuntime.BEMContext.prototype.cloneElement = React.cloneElement;
+    ddslRuntime.BEMContext.prototype.lib = lib || {};
+    ddslRuntime.BEMContext.prototype.lib.cloneElement = React.cloneElement;
     return ddslRuntime.apply(json);
   };
 
