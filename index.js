@@ -72,7 +72,7 @@ module.exports = function (templates, reactComponents, lib) {
         });
         // objectify inline styles
         if (props.style && typeof props.style === 'string') {
-          props.style = props.style.split(';').reduce((ruleMap, ruleString) => {
+          props.style = props.style.split(';').reduce(function (ruleMap, ruleString) {
             if (ruleString) {
               const rulePair = ruleString.split(/:(.+)/);
               if(rulePair[0] && rulePair[1]) {
@@ -90,7 +90,7 @@ module.exports = function (templates, reactComponents, lib) {
       }
 
       if(context.block && js) {
-        Object.keys(js).forEach(key => {
+        Object.keys(js).forEach(function (key) {
           if(typeof js[key] === 'function') {
             js[key] = js[key].bind(ddslRuntime.reactContext);
           }
